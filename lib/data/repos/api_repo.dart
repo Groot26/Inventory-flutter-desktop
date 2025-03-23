@@ -21,17 +21,20 @@ class ApiRepo {
 
 
   Stream<List<Product>> getAllProducts() {
-    return _firestore.collection("products").snapshots().map(
-          (snapshot) => snapshot.docs
-          .map((doc) => Product.fromJson(doc.data(), doc.id)) // ✅ Pass doc.id as second argument
-          .toList(),
-    );
+    return _firestore
+        .collection("products")
+        .orderBy("createdAt", descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => Product.fromJson(doc.data(), doc.id))
+        .toList());
   }
+
 
   Stream<List<Bill>> getAllBills() {
     return _firestore
         .collection("bills")
-        .orderBy("timestamp", descending: true) // ✅ Matches Firestore field
+        .orderBy("timestamp", descending: true)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -40,17 +43,14 @@ class ApiRepo {
     });
   }
 
-  // Stream<List<Product>> getAllProducts() {
-  //   return _firestore.collection('products').snapshots().map((snapshot) {
-  //     return snapshot.docs.map(
-  //           (doc) => Product.fromJson(doc.data(), doc.id),
-  //     ).toList();
-  //   });
-  // }
 
   Future<void> addProduct(Product product) async {
-    await _firestore.collection('products').add(product.toJson());
+    await _firestore.collection('products').add({
+      ...product.toJson(),
+      "createdAt": Timestamp.now(),
+    });
   }
+
 
   Future<Product?> getProductByBarcode(String barcode) async {
     var query = await _firestore
@@ -63,6 +63,15 @@ class ApiRepo {
       return Product.fromJson(query.docs.first.data(), query.docs.first.id);
     }
     return null;
+  }
+
+  Future<void> updateProduct(Product product) async {
+    await _firestore.collection('products').doc(product.id).update(product.toJson());
+  }
+
+
+  Future<void> deleteProduct(String id) async {
+    await _firestore.collection('products').doc(id).delete();
   }
 
 
@@ -240,45 +249,7 @@ class ApiRepo {
       throw "Failed to Load Store..!";
     }
   }
-
-  // Get All Store Product
-  // getAllStoreProduct() async {
-  //   final userDetails = await Preferences.fetchUserDetails();
-  //   String InfluencerId = userDetails['influencer']['_id'];
-  //   Response response =
-  //       await api.sendRequest.get("/65043c5d53d04420eb4d0f64/all-products");
-  //   ApiResponse apiResponse = ApiResponse.fromResponse(response);
-  //   if (response.statusCode == 200) {
-  //     if (apiResponse.success != "success") {
-  //       throw "Failed to Load Store..!";
-  //     } else {
-  //       print("////////////////////////////apiResponse.data" +
-  //           apiResponse.data.toString());
-  //       return apiResponse.data;
-  //     }
-  //   } else {
-  //     throw "Failed to Load Store product..!";
-  //   }
-  // }
-
-  // getArchivedProduct() async {
-  //   final userDetails = await Preferences.fetchUserDetails();
-  //   String InfluencerId = userDetails['influencer']['_id'];
-  //   Response response =
-  //       await api.sendRequest.get("${ApiValue.showArchivedURL}/$InfluencerId");
-  //   ApiResponse apiResponse = ApiResponse.fromResponse(response);
-  //   if (response.statusCode == 200) {
-  //     if (apiResponse.success != "success") {
-  //       throw "Failed to Load Store..!";
-  //     } else {
-  //       print("////////////////////////////apiResponse.data" +
-  //           apiResponse.data.toString());
-  //       return apiResponse.data;
-  //     }
-  //   } else {
-  //     throw "Failed to Load Store product..!";
-  //   }
-  // }
+  
 
   // Main Categories
   homeCategoryList(String parentId) async {

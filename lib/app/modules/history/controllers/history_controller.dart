@@ -11,10 +11,9 @@ class HistoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchBills();
+     fetchBills();
   }
 
-  /// ✅ Fetch past bills
   void fetchBills() {
    ApiRepo().getAllBills().listen((billList) {
      bills.assignAll(billList);

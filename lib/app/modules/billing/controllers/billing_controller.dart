@@ -45,12 +45,12 @@ class BillingController extends GetxController {
     final Product product = selectedProduct.value!;
     billedItems.add(BillItem(
       name: product.name,
-      price: product.price,
+      mrp: product.mrp,
       quantity: quantity,
-      barcode: product.barcode, // ✅ Pass the barcode
+      barcode: product.barcode,
     ));
 
-    totalAmount.value += product.price * quantity;
+    totalAmount.value += product.mrp * quantity;
 
     barcodeController.clear();
     qtyController.clear();
@@ -63,17 +63,17 @@ class BillingController extends GetxController {
     if (billedItems[index].quantity + change > 0) {
       billedItems[index] = BillItem(
         name: billedItems[index].name,
-        price: billedItems[index].price,
+        mrp: billedItems[index].mrp,
         quantity: billedItems[index].quantity + change,
-        barcode: billedItems[index].barcode, // ✅ Pass the barcode
+        barcode: billedItems[index].barcode,
       );
-      totalAmount.value += billedItems[index].price * change;
+      totalAmount.value += billedItems[index].mrp * change;
     }
   }
 
 
   void removeFromBill(int index) {
-    totalAmount.value -= billedItems[index].price * billedItems[index].quantity;
+    totalAmount.value -= billedItems[index].mrp * billedItems[index].quantity;
     billedItems.removeAt(index);
   }
 
@@ -85,7 +85,7 @@ class BillingController extends GetxController {
     for (var item in billedItems) {
       var productQuery = await firestore
           .collection("products")
-          .where("barcode", isEqualTo: item.barcode) // ✅ Now barcode exists
+          .where("barcode", isEqualTo: item.barcode)
           .get();
 
       if (productQuery.docs.isNotEmpty) {
@@ -104,7 +104,7 @@ class BillingController extends GetxController {
     };
 
     await firestore.collection("bills").add(billData);
-    await batch.commit(); // ✅ Stock updates applied
+    await batch.commit();
 
     // Get.to(() => BillPreview(billData));
     billedItems.clear();

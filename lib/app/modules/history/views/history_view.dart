@@ -20,7 +20,7 @@ class HistoryView extends GetView<HistoryController> {
           }
 
           return SingleChildScrollView(
-            scrollDirection: Axis.horizontal, // ✅ Horizontal scrolling for large tables
+            scrollDirection: Axis.horizontal,
             child: DataTable(
               columnSpacing: 20,
               columns: [
@@ -31,7 +31,7 @@ class HistoryView extends GetView<HistoryController> {
               rows: historyController.bills.map((bill) {
                 return DataRow(cells: [
                   DataCell(Text(
-                    bill.createdAt.toDate().toString().split('.')[0], // ✅ Format timestamp
+                    bill.createdAt.toDate().toString().split('.')[0],
                   )),
                   DataCell(Text("₹ ${bill.totalAmount.toStringAsFixed(2)}")),
                   DataCell(
@@ -67,8 +67,8 @@ class HistoryView extends GetView<HistoryController> {
                 children: bill.items.map((item) {
                   return ListTile(
                     title: Text(item.name),
-                    subtitle: Text("Qty: ${item.quantity} x ₹${item.price}"),
-                    trailing: Text("₹${(item.quantity * item.price).toStringAsFixed(2)}"),
+                    subtitle: Text("Qty: ${item.quantity} x ₹${item.mrp}"),
+                    trailing: Text("₹${(item.quantity * item.mrp).toStringAsFixed(2)}"),
                   );
                 }).toList(),
               ),

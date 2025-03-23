@@ -42,9 +42,9 @@ class BillingView extends GetView<BillingController> {
             // Display Selected Product
             Obx(() {
               if (billingController.selectedProduct.value == null) {
-                return Center(child: Text("No product selected", style: TextStyle(color: Colors.red)));
+                return SizedBox();
+                  // Center(child: Text("No product selected", style: TextStyle(color: Colors.red)));
               }
-
               final Product product = billingController.selectedProduct.value!;
               return Card(
                 elevation: 3,
@@ -54,7 +54,7 @@ class BillingView extends GetView<BillingController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("📌 Name: ${product.name}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text("💰 Price: ₹${product.price}"),
+                      Text("💰 Mrp: ₹${product.mrp}"),
                       Text("📦 Stock: ${product.stock}"),
                       SizedBox(height: 5),
                       Row(
@@ -100,7 +100,7 @@ class BillingView extends GetView<BillingController> {
                       DataColumn(label: Text('SR No.', style: TextStyle(fontWeight: FontWeight.bold))),
                       DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
                       DataColumn(label: Text('Qty', style: TextStyle(fontWeight: FontWeight.bold))),
-                      DataColumn(label: Text('Price (₹)', style: TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(label: Text('MRP (₹)', style: TextStyle(fontWeight: FontWeight.bold))),
                       DataColumn(label: Text('Total (₹)', style: TextStyle(fontWeight: FontWeight.bold))),
                       DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
@@ -124,8 +124,8 @@ class BillingView extends GetView<BillingController> {
                             ],
                           ),
                         ),
-                        DataCell(Text("₹${item.price.toStringAsFixed(2)}")),
-                        DataCell(Text("₹${(item.price * item.quantity).toStringAsFixed(2)}")),
+                        DataCell(Text("₹${item.mrp.toStringAsFixed(2)}")),
+                        DataCell(Text("₹${(item.mrp * item.quantity).toStringAsFixed(2)}")),
                         DataCell(
                           IconButton(
                             icon: Icon(Icons.delete, color: Colors.red),
@@ -144,7 +144,7 @@ class BillingView extends GetView<BillingController> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "🧾 Total Amount: ₹${billingController.totalAmount.value.toStringAsFixed(2)}",
+                  "Total Amount: ₹${billingController.totalAmount.value.toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               );
@@ -154,8 +154,8 @@ class BillingView extends GetView<BillingController> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: billingController.generateBill,
-                icon: Icon(Icons.check),
-                label: Text("Generate Bill"),
+                // icon: Icon(Icons.check),
+                label: Text("Bill"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                 ),

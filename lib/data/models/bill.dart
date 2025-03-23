@@ -1,12 +1,12 @@
 class BillItem {
   String name;
-  double price;
+  double mrp;
   int quantity;
   String barcode;
 
   BillItem({
     required this.name,
-    required this.price,
+    required this.mrp,
     required this.quantity,
     required this.barcode,
   });
@@ -15,7 +15,7 @@ class BillItem {
   factory BillItem.fromJson(Map<String, dynamic> json) {
     return BillItem(
       name: json['name'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
+      mrp: (json['mrp'] ?? 0).toDouble(),
       quantity: json['quantity'] ?? 0,
       barcode: json['barcode'] ?? '',
     );
@@ -25,7 +25,7 @@ class BillItem {
   Map<String, dynamic> toJson() {
     return {
       "name": name,
-      "price": price,
+      "mrp": mrp,
       "quantity": quantity,
       "barcode": barcode,
     };
